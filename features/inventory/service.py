@@ -10,7 +10,6 @@ class InventoryService:
         filter_query = {}
         
         if query:
-            # Case insensitive regex match on name or description
             regex = re.compile(query, re.IGNORECASE)
             filter_query["$or"] = [
                 {"name": regex},
@@ -32,7 +31,7 @@ class InventoryService:
         cursor = self.collection.find(filter_query).limit(limit)
         results = []
         for doc in cursor:
-            doc["_id"] = str(doc["_id"])  # Convert ObjectId to string
+            doc["_id"] = str(doc["_id"]) 
             results.append(doc)
             
         return results

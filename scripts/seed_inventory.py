@@ -24,6 +24,7 @@ def seed_inventory():
             "stock": 100,
             "description": "Premium cotton classic fit white t-shirt.",
             "sizes": ["S", "M", "L", "XL"],
+            "image_url": "https://image.hm.com/assets/hm/80/c0/80c068d60249eb76e34ad06555d00c0f705e94f5.jpg?imwidth=2160",
             "created_at": datetime.utcnow()
         },
         {
@@ -34,6 +35,7 @@ def seed_inventory():
             "stock": 50,
             "description": "Dark wash slim fit denim jeans.",
             "sizes": ["30", "32", "34", "36"],
+            "image_url": "https://www.crossjeans.com/cdn/shop/files/E_198_026_cross_jeans_UD2024_1_1445x.jpg?v=1714652230",
             "created_at": datetime.utcnow()
         },
         {
@@ -44,6 +46,7 @@ def seed_inventory():
             "stock": 20,
             "description": "Genuine leather biker jacket.",
             "sizes": ["M", "L", "XL"],
+            "image_url": "https://cdn.fynd.com/v2/falling-surf-7c8bb8/fyprod/wrkr/products/pictures/item/free/original/000000410499092004/jD16RqXjMT-1.jpg",
             "created_at": datetime.utcnow()
         },
         # Women
@@ -55,6 +58,7 @@ def seed_inventory():
             "stock": 80,
             "description": "Lightweight floral print summer dress.",
             "sizes": ["XS", "S", "M", "L"],
+            "image_url": "https://wforwoman.com/cdn/shop/files/23FEW18932-120275_1.jpg?v=1721331983",
             "created_at": datetime.utcnow()
         },
         {
@@ -65,6 +69,7 @@ def seed_inventory():
             "stock": 60,
             "description": "Elegant high-waist trousers for work or casual wear.",
             "sizes": ["S", "M", "L"],
+            "image_url": "https://m.media-amazon.com/images/I/71OXMt3skaL._AC_UY1100_.jpg",
             "created_at": datetime.utcnow()
         },
         # Accessories
@@ -76,6 +81,7 @@ def seed_inventory():
             "stock": 120,
             "description": "Comfortable canvas sneakers in various colors.",
             "sizes": ["38", "39", "40", "41", "42", "43", "44"],
+            "image_url": "https://assets.myntassets.com/w_412,q_30,dpr_3,fl_progressive,f_webp/assets/images/30099195/2024/9/19/efccc43f-2f45-4bc9-9616-8f24a94036561726710226691-Ludic-Unisex-Canvas-Classic-Textured-Comfort-Insole-Canvas-S-2.jpg",
             "created_at": datetime.utcnow()
         },
         {
@@ -86,6 +92,7 @@ def seed_inventory():
             "stock": 200,
             "description": "Classic leather belt with metal buckle.",
             "sizes": ["S", "M", "L", "XL"],
+            "image_url": "https://styleunion.in/cdn/shop/products/8907546694415_3.jpg?v=1747920823",
             "created_at": datetime.utcnow()
         }
     ]
