@@ -196,6 +196,18 @@ sequenceDiagram
    python main.py
    ```
 
+### Docker Support
+
+Alternatively, you can run the entire system (Agent + MongoDB) using Docker.
+
+1.  **Build and Run**:
+
+    ```bash
+    docker-compose up --build
+    ```
+
+    The bot will start, and MongoDB will be available automatically.
+
 ## Tech Stack
 
 - **Language**: Python 3.13
