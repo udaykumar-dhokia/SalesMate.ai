@@ -10,23 +10,25 @@ from langchain_core.messages import HumanMessage
 from config.db import client
 
 from tools.inventory_tools import search_inventory
+from tools.order_tools import buy_product
 
 load_dotenv()
 
 model = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
+    model="gemini-2.5-flash-lite",
     api_key=os.getenv("GEMINI_API_KEY"),
 )
 
 agent = create_agent(
     model=model,
-    tools=[search_inventory],
+    tools=[search_inventory, buy_product],
     system_prompt="You are a helpful sales assistant for SalesMate, a fashion brand.\n"
                   "You can check our inventory to answer user questions about products, prices, and availability.\n"
                   "If a user asks about products, use the 'search_inventory' tool to find relevant items.\n" 
                   "When displaying products, always include the product 'image_url' in your response as a markdown image.\n"
                   "Be polite and professional and don't return response in markdown format just plain text, except for the image.\n"
-                  "IMPORTANT: Remember context from the conversation. If the user mentions their size, preferences, or other details, use that information to answer follow-up questions.",
+                  "IMPORTANT: Remember context from the conversation. If the user mentions their size, preferences, or other details, use that information to answer follow-up questions.\n"
+                  "SHOPPING: If a user wants to buy something, use the 'buy_product' tool. YOU MUST ask for their email address if it's not already known before confirming the purchase.",
 )
 
 def get_session_history(session_id: str):
@@ -93,7 +95,6 @@ async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if len(args) < 4:
         await update.message.reply_text('Usage: /register "Full Name" <mobile> <email> <password>')
         return
-    
     
     if len(args) >= 4:
         mobile_number = args[-3]

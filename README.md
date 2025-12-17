@@ -14,19 +14,27 @@ The following diagram illustrates the high-level architecture of SalesMate.ai:
 graph TD
     User((User)) <-->|Messages| Telegram[Telegram Bot]
     Telegram <-->|Updates| Agent[Main Agent Logic]
+    Agent <-->|Memory| History[Mongo Memory]
 
     subgraph Core System
-        Agent <-->|Generate Response| LLM[Google Gemini LLM]
-        Agent <-->|Manage Users| Auth[Auth Service]
-        Agent <-->|Query Products| Tools[Inventory Tools]
+        Agent <-->|Content Generation| LLM[Google Gemini LLM]
+        Agent <-->|User Auth| Auth[Auth Service]
+        Agent <-->|Inventory Search| InvTools[Inventory Tool]
+        Agent <-->|Place Orders| OrderTool[Order Tool]
 
-        Tools <-->|Search Logic| Inv[Inventory Service]
+        InvTools <-->|Query| Inv[Inventory Service]
+        OrderTool -->|Create| Orders[Order Service]
+        OrderTool -->|Notify| Email[Email Service]
     end
 
     subgraph Data Layer
-        Auth <-->|Read/Write Users| DB[(MongoDB)]
-        Inv <-->|Read Inventory| DB
+        Auth <-->|Users| DB[(MongoDB)]
+        Inv <-->|Products| DB
+        Orders <-->|Orders| DB
+        History <-->|Chat Logs| DB
     end
+
+    Email -.->|SMTP| User
 
     style User fill:#f9f,stroke:#333
     style DB fill:#ee7,stroke:#333
@@ -36,8 +44,11 @@ graph TD
 
 - **Secure Authentication**: Register and login securely via Telegram commands.
 - **Natural Language Search**: Ask vague questions like "Show me some summer dresses" and get precise results.
-- **Inventory Management**: Scalable inventory tracking with MongoDB.
-- **Contextual AI**: Uses Google's Gemini-2.5-flash for understanding user intent and context.
+- **Visual Shopping**: View product images directly within the chat for a better shopping experience.
+- **Conversational Memory**: The bot remembers your preferences and context (e.g., size), allowing for seamless follow-up questions.
+- **Order System**: "Buy" products directly in the chat. The bot calculates totals, creates orders, and simulates payments.
+- **Real-time Notifications**: Receive professional HTML email confirmations with order details via SMTP.
+- **Contextual AI**: Uses Google's Gemini-1.5-flash for understanding user intent and context.
 
 ## Workflows
 
@@ -103,6 +114,34 @@ flowchart LR
     style DB fill:#ee7,stroke:#333
 ```
 
+### 3. Order & Payment Flow
+
+Seamlessly buy products and receive email confirmations.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Agent
+    participant OrderService
+    participant EmailService
+
+    User->>Agent: "I want to buy 2 T-Shirts"
+    Agent->>Agent: Check Inventory & Calculate Total
+
+    alt Email Missing
+        Agent->>User: "What is your email?"
+        User->>Agent: "user@example.com"
+    end
+
+    Agent->>OrderService: create_order(items, total)
+    OrderService-->>Agent: Order Created (ID, PaymentID)
+
+    Agent->>EmailService: send_confirmation(email, order)
+    EmailService->>User: Send HTML Email (SMTP)
+
+    Agent-->>User: "Payment Successful! Order #123 placed."
+```
+
 ## Setup & Installation
 
 ### Prerequisites
@@ -111,6 +150,7 @@ flowchart LR
 - MongoDB Instance (Local or Atlas)
 - Telegram Bot Token (from @BotFather)
 - Gemini API Key
+- SMTP Credentials (for emails)
 
 ### Installation
 
@@ -136,6 +176,12 @@ flowchart LR
    TELEGRAM_BOT_TOKEN=your_bot_token
    GEMINI_API_KEY=your_gemini_key
    MONGODB_URL=mongodb://localhost:27017/
+
+   # SMTP Configuration (Gmail Example)
+   SMTP_SERVER=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USERNAME=your_email@gmail.com
+   SMTP_PASSWORD=your_app_password
    ```
 
 4. **Seed Database**
@@ -154,6 +200,6 @@ flowchart LR
 
 - **Language**: Python 3.13
 - **LLM Framework**: LangChain & LangGraph
-- **Model**: Google Gemini 2.5 Flash
+- **Model**: Google Gemini 1.5 Flash
 - **Database**: MongoDB
 - **Interface**: Python Telegram Bot
